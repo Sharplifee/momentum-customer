@@ -20,7 +20,7 @@ import Constants from "expo-constants";
  * Momentum Landscaping — customer app.
  *
  * This is a shell, not a second product. Every screen the customer sees is the
- * portal at portal.momentumlandscapingut.com, which already has login,
+ * customer web app at momentumlandscapingut.com/#app, which already has login,
  * schedule, history, billing with Stripe checkout, property, preferences and
  * messages. Rebuilding those natively would mean two codebases to keep in step
  * for no gain, so the only native code here is what a webview genuinely cannot
@@ -30,7 +30,7 @@ import Constants from "expo-constants";
  */
 
 const PORTAL_URL =
-  Constants.expoConfig?.extra?.portalUrl ?? "https://portal.momentumlandscapingut.com";
+  Constants.expoConfig?.extra?.portalUrl ?? "https://momentumlandscapingut.com/#app";
 const BUNDLE_ID = Constants.expoConfig?.ios?.bundleIdentifier ?? "com.momentumlandscapingut.customer";
 const APP_VERSION = Constants.expoConfig?.version ?? "1.0.0";
 const PORTAL_HOST = new URL(PORTAL_URL).host;
