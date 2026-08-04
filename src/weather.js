@@ -55,27 +55,3 @@ export async function getForecast({ lat, lng, sessionToken }) {
     return null;
   }
 }
-
-/**
- * Plain-English read on whether service day looks workable.
- *
- * Deliberately not a raw percentage. "60% chance of precipitation" makes a
- * customer decide for themselves; "rain likely, we may move you" tells them
- * what it means for their yard, which is the only thing they wanted to know.
- */
-export function serviceDayOutlook(day) {
-  if (!day) return null;
-  const rain = day.precipitationChance ?? 0;
-  const wind = day.windSpeedMax ?? 0;
-
-  if (rain >= 0.7) {
-    return { tone: "warn", text: "Rain likely — we may move your visit. We'll text you if we do." };
-  }
-  if (rain >= 0.4) {
-    return { tone: "watch", text: "Showers possible. We'll keep an eye on it and let you know." };
-  }
-  if (wind >= 35) {
-    return { tone: "watch", text: "Windy — clippings may scatter, so we'll take extra care on cleanup." };
-  }
-  return { tone: "good", text: "Clear for your visit." };
-}
