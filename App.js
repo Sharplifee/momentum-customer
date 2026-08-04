@@ -15,6 +15,7 @@ import { StatusBar } from "expo-status-bar";
 import { WebView } from "react-native-webview";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
+import { WeatherBar } from "./src/WeatherBar";
 
 /**
  * Momentum Landscaping — customer app.
@@ -174,6 +175,7 @@ export default function App() {
     <SafeAreaProvider>
       <SafeAreaView style={styles.fill} edges={["top", "left", "right"]}>
         <StatusBar style="light" />
+        <WeatherBar />
         <WebView
           ref={webRef}
           source={{ uri: PORTAL_URL }}
