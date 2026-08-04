@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Momentum Landscaping",
+    "name": "MomentumLAND",
     "slug": "momentum-customer",
     "scheme": "momentum",
     "version": "1.0.0",
@@ -27,7 +27,8 @@
         "NSCameraUsageDescription": "Attach a photo when you message us about your yard.",
         "NSPhotoLibraryUsageDescription": "Attach a photo when you message us about your yard.",
         "ITSAppUsesNonExemptEncryption": false,
-        "NSLocationWhenInUseUsageDescription": "Momentum uses your location once to show the forecast for your own yard on service day. We never track you in the background."
+        "NSLocationWhenInUseUsageDescription": "Momentum uses your location once to show the forecast for your own yard on service day. We never track you in the background.",
+        "CFBundleDisplayName": "MomentumLAND"
       },
       "entitlements": {
         "com.apple.developer.weatherkit": true
