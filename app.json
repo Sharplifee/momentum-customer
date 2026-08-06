@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "MomentumLAND",
+    "name": "Momentum Landscaping",
     "slug": "momentum-customer",
     "scheme": "momentum",
     "version": "1.0.0",
@@ -13,25 +13,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#0F1720"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.momentumlandscapingut.customer",
       "buildNumber": "1",
       "supportsTablet": false,
-      "config": {
-        "usesNonExemptEncryption": false
-      },
+      "config": { "usesNonExemptEncryption": false },
       "infoPlist": {
         "NSCameraUsageDescription": "Attach a photo when you message us about your yard.",
         "NSPhotoLibraryUsageDescription": "Attach a photo when you message us about your yard.",
-        "ITSAppUsesNonExemptEncryption": false,
-        "NSLocationWhenInUseUsageDescription": "Momentum uses your location once to show the forecast for your own yard on service day. We never track you in the background.",
-        "CFBundleDisplayName": "MomentumLAND"
-      },
-      "entitlements": {
-        "com.apple.developer.weatherkit": true
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -48,16 +39,10 @@
           "icon": "./assets/notification-icon.png",
           "color": "#7FB8BE"
         }
-      ],
-      [
-        "expo-location",
-        {
-          "locationWhenInUsePermission": "Momentum uses your location once to show the forecast for your own yard on service day."
-        }
       ]
     ],
     "extra": {
-      "portalUrl": "https://momentumlandscapingut.com/app"
+      "appUrl": "https://momentumlandscapingut.com/#app"
     }
   }
 }

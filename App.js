@@ -15,26 +15,28 @@ import { StatusBar } from "expo-status-bar";
 import { WebView } from "react-native-webview";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
-import { WeatherBar } from "./src/WeatherBar";
 
 /**
  * Momentum Landscaping — customer app.
  *
  * This is a shell, not a second product. Every screen the customer sees is the
- * customer web app at momentumlandscapingut.com/app, which already has login,
- * schedule, history, billing with Stripe checkout, property, preferences and
- * messages. Rebuilding those natively would mean two codebases to keep in step
- * for no gain, so the only native code here is what a webview genuinely cannot
- * do: ask iOS for a push token and hand notification taps back to the page.
+ * customer web app at momentumlandscapingut.com/#app — same deployment as the
+ * public site, which is why a desktop customer signs in at the same address and
+ * why the two can never drift apart. Rebuilding those screens natively would
+ * mean two codebases to keep in step for no gain, so the only native code here
+ * is what a webview genuinely cannot do: ask iOS for a push token and hand
+ * notification taps back to the page.
  *
  * Unlike the crew app there is no background location — that is crew-only.
  */
 
-const PORTAL_URL =
-  Constants.expoConfig?.extra?.portalUrl ?? "https://momentumlandscapingut.com/app";
+// The customer app is a hash route on the main site, served by the momentum-site
+// project. portal.momentumlandscapingut.com was retired on 2026-08-04 and now
+// returns DEPLOYMENT_NOT_FOUND, so nothing may point at it.
+const APP_URL = Constants.expoConfig?.extra?.appUrl ?? "https://momentumlandscapingut.com/#app";
 const BUNDLE_ID = Constants.expoConfig?.ios?.bundleIdentifier ?? "com.momentumlandscapingut.customer";
 const APP_VERSION = Constants.expoConfig?.version ?? "1.0.0";
-const PORTAL_HOST = new URL(PORTAL_URL).host;
+const APP_HOSTS = new Set(["momentumlandscapingut.com", "www.momentumlandscapingut.com"]);
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -106,9 +108,11 @@ export default function App() {
   useEffect(() => {
     const sub = Notifications.addNotificationResponseReceivedListener((response) => {
       const path = response?.notification?.request?.content?.data?.url;
-      if (typeof path === "string" && path.startsWith("/") && webRef.current) {
+      // The app routes on the hash, so a notification carries "#schedule"
+      // rather than a path. Anything else is ignored rather than guessed at.
+      if (typeof path === "string" && path.startsWith("#") && webRef.current) {
         webRef.current.injectJavaScript(
-          `window.location.href = ${JSON.stringify(path)}; true;`
+          `window.location.hash = ${JSON.stringify(path)}; true;`
         );
       }
     });
@@ -144,7 +148,7 @@ export default function App() {
     } catch {
       return false;
     }
-    if (host === PORTAL_HOST) return true;
+    if (APP_HOSTS.has(host)) return true;
     Linking.openURL(url).catch(() => {});
     return false;
   }, []);
@@ -175,10 +179,9 @@ export default function App() {
     <SafeAreaProvider>
       <SafeAreaView style={styles.fill} edges={["top", "left", "right"]}>
         <StatusBar style="light" />
-        <WeatherBar />
         <WebView
           ref={webRef}
-          source={{ uri: PORTAL_URL }}
+          source={{ uri: APP_URL }}
           style={styles.fill}
           // The portal writes a cookie session; without shared storage the
           // customer would be asked to sign in on every cold start.
