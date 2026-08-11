@@ -20,7 +20,7 @@ import Constants from "expo-constants";
  * Momentum Landscaping — customer app.
  *
  * This is a shell, not a second product. Every screen the customer sees is the
- * customer web app at momentumlandscapingut.com/#app — same deployment as the
+ * customer web app at momentumlandscapingut.com/app — same deployment as the
  * public site, which is why a desktop customer signs in at the same address and
  * why the two can never drift apart. Rebuilding those screens natively would
  * mean two codebases to keep in step for no gain, so the only native code here
@@ -33,7 +33,7 @@ import Constants from "expo-constants";
 // The customer app is a hash route on the main site, served by the momentum-site
 // project. portal.momentumlandscapingut.com was retired on 2026-08-04 and now
 // returns DEPLOYMENT_NOT_FOUND, so nothing may point at it.
-const APP_URL = Constants.expoConfig?.extra?.appUrl ?? "https://momentumlandscapingut.com/#app";
+const APP_URL = Constants.expoConfig?.extra?.appUrl ?? "https://momentumlandscapingut.com/app";
 const BUNDLE_ID = Constants.expoConfig?.ios?.bundleIdentifier ?? "com.momentumlandscapingut.customer";
 const APP_VERSION = Constants.expoConfig?.version ?? "1.0.0";
 const APP_HOSTS = new Set(["momentumlandscapingut.com", "www.momentumlandscapingut.com"]);
@@ -108,11 +108,17 @@ export default function App() {
   useEffect(() => {
     const sub = Notifications.addNotificationResponseReceivedListener((response) => {
       const path = response?.notification?.request?.content?.data?.url;
-      // The app routes on the hash, so a notification carries "#schedule"
-      // rather than a path. Anything else is ignored rather than guessed at.
-      if (typeof path === "string" && path.startsWith("#") && webRef.current) {
+      // The page keeps its screen in React state and never reads location.hash,
+      // so setting the hash did nothing and every tap landed on whatever screen
+      // was already open. window.momentumOpen is the page's own entry point; if
+      // the tap beats the page to mount, park it and let the page drain it.
+      if (typeof path === "string" && path.trim() && webRef.current) {
+        const route = JSON.stringify(path.replace(/^#/, "").trim());
         webRef.current.injectJavaScript(
-          `window.location.hash = ${JSON.stringify(path)}; true;`
+          `(function(){
+             if (typeof window.momentumOpen === 'function') { window.momentumOpen(${route}); }
+             else { window.__momentumPendingRoute = ${route}; }
+           })(); true;`
         );
       }
     });
