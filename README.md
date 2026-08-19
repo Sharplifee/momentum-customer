@@ -1,9 +1,11 @@
 # Momentum Landscaping — customer app
 
 A thin iOS shell around the customer web app at
-`https://momentumlandscapingut.com/app`. Every screen lives in `site/app/index.html`
-in `Sharplifee/momentum`, served by the Vercel project `momentum-site`. The only native code here is push
-registration and notification-tap routing — the two things a webview can't do.
+`https://momentumlandscapingut.com/app`. Every screen lives in
+`public/app/index.html` in `Sharplifee/momentum-app` (split out of
+`Sharplifee/momentum` on 2026-08-13), served by the Vercel project
+`momentum-site`. The only native code here is push registration and
+notification-tap routing — the two things a webview can't do.
 
 No background location. That's the crew app.
 
